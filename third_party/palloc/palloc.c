@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2010, 2011, 2012, 2013 Mail.RU
- * Copyright (C) 2010, 2011, 2012, 2013 Yuriy Vostrikov
+ * Copyright (C) 2010, 2011, 2012, 2013, 2017 Mail.RU
+ * Copyright (C) 2010, 2011, 2012, 2013, 2017 Yuriy Vostrikov
  * Copyright (C) 2012, 2013 Roman Tokarev
  *
  * Redistribution and use in source and binary forms, with or without
@@ -190,6 +190,7 @@ struct palloc_pool {
 	struct chunk_list_head chunks;
 	SLIST_ENTRY(palloc_pool) link;
 	size_t allocated;
+	unsigned rc;
 	struct gc_list gc_list;
 	struct cut_list cut_list;
 };
@@ -527,6 +528,7 @@ palloc_create_pool(struct palloc_config cfg)
 	assert(pool != NULL);
 	pool->cfg = cfg;
 	pool->allocated = 0;
+	pool->rc = 1;
 	TAILQ_INIT(&pool->chunks);
 	SLIST_INIT(&pool->gc_list);
 	SLIST_INIT(&pool->cut_list);
@@ -601,6 +603,20 @@ palloc_gc(struct palloc_pool *pool)
 		root->copy(pool, root->ptr);
 
 	release_chunks(&old_chunks);
+}
+
+void
+palloc_ref(struct palloc_pool *pool)
+{
+	pool->rc++;
+}
+
+void
+palloc_unref(struct palloc_pool *pool)
+{
+	pool->rc--;
+	if (pool->rc == 0)
+		palloc_destroy_pool(pool);
 }
 
 struct palloc_cut_point *

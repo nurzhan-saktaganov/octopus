@@ -1,6 +1,6 @@
 /*
- * Copyright (C) 2010, 2011, 2012, 2013 Mail.RU
- * Copyright (C) 2010, 2011, 2012, 2013 Yuriy Vostrikov
+ * Copyright (C) 2010, 2011, 2012, 2013, 2017 Mail.RU
+ * Copyright (C) 2010, 2011, 2012, 2013, 2017 Yuriy Vostrikov
  * Copyright (C) 2012, 2013 Roman Tokarev
  *
  * Redistribution and use in source and binary forms, with or without
@@ -63,6 +63,9 @@ void palloc_register_gc_root(struct palloc_pool *pool,
 			     void *ptr, void (*copy)(struct palloc_pool *, void *));
 void palloc_unregister_gc_root(struct palloc_pool *pool, void *ptr);
 void palloc_gc(struct palloc_pool *pool);
+
+void palloc_ref(struct palloc_pool *pool);
+void palloc_unref(struct palloc_pool *pool);
 
 struct palloc_cut_point *palloc_register_cut_point(struct palloc_pool *pool);
 // cut off to the latest cut point
