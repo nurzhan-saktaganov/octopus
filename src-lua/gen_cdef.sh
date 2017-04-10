@@ -19,7 +19,7 @@ EOF
 # $CPP $srcdir/include/octopus.h | $SED -n '/^\(struct tnt_object\) \+{/,/^}/p'
 $CPP $srcdir/include/octopus.h | $SED '/^\(extern \)\?\(inline \)\?\(_Bool\|void\|int\) object_.*$/!d; s/^extern //; s/^inline //; /;$/!s/$/;/'
 $CPP $srcdir/include/octopus.h | $SED -n '/^extern struct octopus_cfg/p;'
-$CPP $srcdir/include/palloc.h | $SED -n '/^typedef/p; /^struct palloc_config {/,/^}/p; /palloc(/p'
+$CPP $srcdir/include/palloc.h | $SED -n '/^typedef.*palloc/p; /^struct palloc_config {/,/^}/p; /palloc(/p'
 $CPP $srcdir/include/index.h | $SED -n '/^\(struct\|union\|enum\) index_[a-z_]\+ \+{/,/^}/p'
 $CPP $srcdir/include/index.h | $SED -n '/^enum iterator_direction\+ \+{/,/^}/p'
 $CPP $srcdir/include/index.h | $SED -n '/set_lstr_field_noninline/p'
